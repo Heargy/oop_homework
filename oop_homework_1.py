@@ -10,6 +10,19 @@ class Student:
     def add_courses(self, course_name):
         self.finished_courses.append(course_name)
 
+    def rate_lecture(self, lector, course, grade):
+        if (isinstance(lector, Lectors) and course in self.courses_in_progress or
+                course in self.finished_courses and course in lector.courses_attached):
+            if 0 < grade < 10:
+                if course in lector.grades:
+                    lector.grades[course] += [grade]
+                else:
+                    lector.grades[course] = [grade]
+            else:
+                return 'Error'
+        else:
+            return 'Error'
+
 
 class Mentor:
     def __init__(self, name, surname):
@@ -17,6 +30,14 @@ class Mentor:
         self.surname = surname
         self.courses_attached = []
 
+
+class Lectors(Mentor):
+    def __init__(self, name, surname):
+        super().__init__(name, surname)
+        self.grades = {}
+
+
+class Reviewer(Mentor):
     def rate_hw(self, student, course, grade):
         if isinstance(student, Student) and course in self.courses_attached and course in student.courses_in_progress:
             if course in student.grades:
@@ -24,21 +45,13 @@ class Mentor:
             else:
                 student.grades[course] = [grade]
         else:
-            return 'Ошибка'
-
-
-class Lectors(Mentor):
-    pass
-
-
-class Reviewer(Mentor):
-    pass
+            return 'Error'
 
 
 best_student = Student('Ruoy', 'Eman', 'your_gender')
 best_student.courses_in_progress += ['Python']
 
-cool_mentor = Mentor('Some', 'Buddy')
+cool_mentor = Reviewer('Some', 'Buddy')
 cool_mentor.courses_attached += ['Python']
 
 cool_mentor.rate_hw(best_student, 'Python', 10)
