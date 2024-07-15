@@ -85,36 +85,65 @@ class Reviewer(Mentor):
                 f'Фамилия: {self.surname}\n')
 
 
+def average_rate_of_students(students, course):
+    return (sum(map(sum, (map(lambda student: student.grades.get(course), students)))) /
+            sum(map(len, (map(lambda student: student.grades.get(course), students)))))
+
+
+def average_rate_of_lectors(lectors, course):
+    return (sum(map(sum, (map(lambda lector: lector.grades.get(course), lectors)))) /
+            sum(map(len, (map(lambda lector: lector.grades.get(course), lectors)))))
+
+
 best_student = Student('Ruoy', 'Eman', 'your_gender')
 best_student.courses_in_progress += ['Python']
 best_student.courses_in_progress += ['Java']
-best_student.finished_courses += ['Введение в программирование']
+best_student.add_courses('Введение в программирование')
 
-cool_mentor = Reviewer('Some', 'Buddy')
-cool_mentor.courses_attached += ['Python']
-cool_mentor.courses_attached += ['Java']
+fool_student = Student('Peter', 'Perelman', 'your_gender')
+fool_student.courses_in_progress += ['Python']
+fool_student.courses_in_progress += ['PHP']
+fool_student.add_courses('Git')
 
-cool_mentor.rate_hw(best_student, 'Python', 9)
-cool_mentor.rate_hw(best_student, 'Java', 7)
-cool_mentor.rate_hw(best_student, 'Python', 9)
+cool_reviewer = Reviewer('Some', 'Buddy')
+cool_reviewer.courses_attached += ['Python']
+cool_reviewer.courses_attached += ['Java']
+
+evil_reviewer = Reviewer('Chuck', 'Palahniuk')
+evil_reviewer.courses_attached += ['Python']
+evil_reviewer.courses_attached += ['PHP']
 
 cool_lector = Lectors('Some', 'Buddy')
 cool_lector.courses_attached += ['Python']
 cool_lector.courses_attached += ['Java']
 
+lazy_lector = Lectors('Chad', 'Bronson')
+lazy_lector.courses_attached += ['Python']
+lazy_lector.courses_attached += ['PHP']
+
+cool_reviewer.rate_hw(best_student, 'Python', 9)
+cool_reviewer.rate_hw(best_student, 'Java', 8)
+cool_reviewer.rate_hw(fool_student, 'Python', 8)
+evil_reviewer.rate_hw(best_student, 'Python', 2)
+evil_reviewer.rate_hw(fool_student, 'PHP', 2)
+evil_reviewer.rate_hw(fool_student, 'Python', 4)
+
 best_student.rate_lecture(cool_lector, 'Java', 8)
-best_student.rate_lecture(cool_lector, 'Java', 8)
+best_student.rate_lecture(lazy_lector, 'Python', 6)
 best_student.rate_lecture(cool_lector, 'Python', 9)
+fool_student.rate_lecture(cool_lector, 'Python', 7)
+fool_student.rate_lecture(lazy_lector, 'PHP', 9)
+fool_student.rate_lecture(lazy_lector, 'Python', 9)
 
-fool_student = Student('Ruoy', 'Eman', 'your_gender')
-fool_student.courses_in_progress += ['Python']
-fool_student.courses_in_progress += ['Java']
-fool_student.finished_courses += ['Введение в программирование']
-
-cool_mentor.rate_hw(fool_student, 'Python', 2)
-cool_mentor.rate_hw(fool_student, 'Java', 3)
-cool_mentor.rate_hw(fool_student, 'Python', 4)
-
+print(best_student)
+print(fool_student)
+print(cool_reviewer)
+print(evil_reviewer)
 print(cool_lector)
-
+print(lazy_lector)
 print(best_student == fool_student)
+print(best_student > fool_student)
+print(cool_lector == lazy_lector)
+print(cool_lector < lazy_lector)
+print(average_rate_of_students([fool_student, best_student], 'Python'))
+print(average_rate_of_lectors([lazy_lector, cool_lector], 'Python'))
